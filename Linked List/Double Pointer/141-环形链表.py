@@ -4,7 +4,7 @@ class Solution:
             return False
         
         slow = head
-        fast = head.next
+        fast = head.next    # fast先走一步 能进去下面的循环条件
 
         while slow != fast:
             if not fast or not fast.next:
