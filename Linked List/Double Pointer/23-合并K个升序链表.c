@@ -83,30 +83,58 @@ public:
 //2.空间复杂度：递归会使用到 O(logk) 空间代价的栈空间。
 
 //方法三：最小堆
+//第一种形式：
 class Solution {
 public:
-    struct comp {
-        bool operator()(ListNode* a, ListNode* b) {
-            return a->val > b->val;
+    struct Status {
+        int val;
+        ListNode *ptr;
+        bool operator < (const Status &rhs) const {
+            return val > rhs.val;
         }
     };
 
-    priority_queue<ListNode*, vector<ListNode*>, comp> q;
+    priority_queue <Status> q;
 
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         for (auto node: lists) {
-            if (node) q.push(node);
+            if (node) q.push({node->val, node});
         }
-        ListNode* head = new ListNode();
-        ListNode* tail = head;
+        ListNode head, *tail = &head;
         while (!q.empty()) {
-            ListNode* node = q.top();
-            q.pop();
-            tail->next = node; 
+            auto f = q.top(); q.pop();
+            tail->next = f.ptr; 
             tail = tail->next;
-            if (node->next) q.push(node->next);
+            if (f.ptr->next) q.push({f.ptr->next->val, f.ptr->next});
         }
-        return head->next;
+        return head.next;
+    }
+};
+//第二种形式：
+class Solution {
+public:
+    struct cmp{
+        bool operator()(ListNode*a,ListNode*b)
+        {
+            return a->val>b->val;       
+        }
+    };
+    //如果把后面两个参数缺省的话，优先队列就是大顶堆，队头元素最大。
+    priority_queue<ListNode*,vector<ListNode*>,cmp> q;
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        for(auto node:lists)
+            if(node) q.push(node);
+        ListNode head,*tail=&head;
+        while(!q.empty())
+        {
+            ListNode*node=q.top();
+            q.pop();
+            tail->next=node;
+            tail=tail->next;
+            if(node->next)q.push(node->next);
+        }        
+        return head.next;
     }
 };
 //1.考虑优先队列中的元素不超过k 个，那么插入和删除的时间代价为 O(logk)，这里最多有kn 个点，对于每个点都被插入删除各一次，故总的时间代价即渐进时间复杂度为O(kn×logk)。
