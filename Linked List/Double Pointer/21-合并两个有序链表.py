@@ -5,10 +5,11 @@
 #         self.next = next
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        if list1 is None:
-            return list2
-        if list2 is None:
-            return list1
+       # 这段可以不要
+#         if list1 is None:
+#             return list2
+#         if list2 is None:
+#             return list1
         dummp=head=ListNode(0)    # 创建新链表时产生的虚节点
         while list1 and list2:
             if list1.val<=list2.val:
