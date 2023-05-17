@@ -31,3 +31,26 @@ public:
         return res;
     }
 };
+时间复杂度：O（N^2）
+
+优化：我们应该把计算「直径」的逻辑放在后序位置，准确说应该是放在 maxDepth 的后序位置，因为 maxDepth 的后序位置是知道左右子树的最大深度的。
+
+class Solution {
+public:
+    int res0=0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        maxDepth(root);
+        return res0;
+    }
+    int maxDepth(TreeNode* root) {
+        if(root==nullptr)
+            return 0;
+        int leftMax=maxDepth(root->left);
+        int rightMax=maxDepth(root->right);
+        int res=max(leftMax,rightMax)+1;
+        int mydiameter=leftMax+rightMax;
+        res0=max(mydiameter,res0);
+        return res;
+    }
+};
+时间复杂度：O（N）
